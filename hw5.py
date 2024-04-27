@@ -27,23 +27,25 @@ if __name__ == "__main__":
         self.states_file = states_file
         self.zipcodes_file = zipcodes_file
         self.zips_file = zips_file
+
+    #read cities
       def read_cities(self):
         with open(self.cities_file, "r") as cities_file:
             return cities_file.read().splitlines()
-
+# read states
     def read_states(self):
         with open(self.states_file, "r") as states_file:
             return set(line.strip() for line in states_file if line.strip())
-
+#read zipcodes
     def read_zipcodes(self):
         with open(self.zipcodes_file, "r") as zipcodes_file:
             next(zipcodes_file)  
             return [line.strip().split('\t') for line in zipcodes_file]
-          
+          #read zips
           def read_zips(self):
         with open(self.zips_file, "r") as zips_file:
             return zips_file.read().splitlines()
-
+#extracting common cities in states
     def extract_common_cities(self, cities, states, zipcodes):
         city_states = {}
         for line in zipcodes:
@@ -52,7 +54,7 @@ if __name__ == "__main__":
                 city_states.setdefault(city, set()).add(state)
         common_cities = filter(lambda city: city_states[city] == states, city_states.keys())
         return sorted(common_cities)
-
+#finding long and lat
 def extract_lat_lon(self, zipcodes):
         zip_lat_lon = {}
         for line in zipcodes:
@@ -60,7 +62,8 @@ def extract_lat_lon(self, zipcodes):
             if zipcode not in zip_lat_lon:
                 zip_lat_lon[zipcode] = (lat, lon)
         return zip_lat_lon
-
+  
+#making output file and writing the lat and lon
     def write_lat_lon(self, zips, zip_lat_lon, output_file):
         with open(output_file, "w") as output_file:
             for zipcode in zips:
