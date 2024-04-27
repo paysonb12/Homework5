@@ -39,6 +39,19 @@ if __name__ == "__main__":
         with open(self.zipcodes_file, "r") as zipcodes_file:
             next(zipcodes_file)  
             return [line.strip().split('\t') for line in zipcodes_file]
+          
+          def read_zips(self):
+        with open(self.zips_file, "r") as zips_file:
+            return zips_file.read().splitlines()
+
+    def extract_common_cities(self, cities, states, zipcodes):
+        city_states = {}
+        for line in zipcodes:
+            _, _, _, city, state, *_ = line
+            if state in states:
+                city_states.setdefault(city, set()).add(state)
+        common_cities = filter(lambda city: city_states[city] == states, city_states.keys())
+        return sorted(common_cities)
 
 
 
