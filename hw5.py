@@ -53,6 +53,24 @@ if __name__ == "__main__":
         common_cities = filter(lambda city: city_states[city] == states, city_states.keys())
         return sorted(common_cities)
 
+def extract_lat_lon(self, zipcodes):
+        zip_lat_lon = {}
+        for line in zipcodes:
+            _, zipcode, _, _, _, _, lat, lon, *_ = line
+            if zipcode not in zip_lat_lon:
+                zip_lat_lon[zipcode] = (lat, lon)
+        return zip_lat_lon
+
+    def write_lat_lon(self, zips, zip_lat_lon, output_file):
+        with open(output_file, "w") as output_file:
+            for zipcode in zips:
+                zipcode = zipcode.strip()
+                if zipcode in zip_lat_lon:
+                    lat, lon = zip_lat_lon[zipcode]
+                    output_file.write(f"{zipcode} {lat} {lon}\n")
+                else:
+                    output_file.write(f"{zipcode.strip()} Not Found\n")
+
 
 
     '''
