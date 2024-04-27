@@ -86,6 +86,30 @@ def extract_lat_lon(self, zipcodes):
             for city, states in city_states.items():
                 states_str = ' '.join(sorted(states)) if states else "Not Found"
                 output_file.write(f"{city}: {states_str}\n")
+              
+    def process(self):
+        cities = self.read_cities()
+        states = self.read_states()
+        zipcodes = self.read_zipcodes()
+        zips = self.read_zips()
+
+        common_cities = self.extract_common_cities(cities, states, zipcodes)
+        lat_lon_data = self.extract_lat_lon(zipcodes)
+        city_states = self.extract_city_states(cities, zipcodes)
+
+        self.write_lat_lon(zips, lat_lon_data, "LatLon.txt")
+        self.write_city_states(city_states, "CityStates.txt")
+        with open("CommonCityNames.txt", "w") as output_file:
+            for city in common_cities:
+                output_file.write(f"{city}\n")
+
+
+def main(*args):
+    processor = Thing(*args)
+    processor.process()
+
+if __name__ == "__main__":
+    main("cities.txt", "states.txt", "zipcodes.txt", "zips.txt")
 
 
 
