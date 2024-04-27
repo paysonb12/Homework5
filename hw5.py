@@ -70,6 +70,22 @@ def extract_lat_lon(self, zipcodes):
                     output_file.write(f"{zipcode} {lat} {lon}\n")
                 else:
                     output_file.write(f"{zipcode.strip()} Not Found\n")
+                  
+                   def extract_city_states(self, cities, zipcodes):
+        unique_cities = set(city.lower() for city in cities)
+        city_states = {}
+        for line in zipcodes:
+            _, _, _, city, state, *_ = line
+            city = city.strip().lower()
+            if city in unique_cities:
+                city_states.setdefault(city, set()).add(state)
+        return city_states
+
+    def write_city_states(self, city_states, output_file):
+        with open(output_file, "w") as output_file:
+            for city, states in city_states.items():
+                states_str = ' '.join(sorted(states)) if states else "Not Found"
+                output_file.write(f"{city}: {states_str}\n")
 
 
 
